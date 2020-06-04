@@ -1,5 +1,5 @@
 const router = require("koa-router")();
-const postModel = require("../lib/mysql");
+const postModel = require("../lib/sql");
 
 // 文章
 router.post("/api/selPostList", async (ctx, next) => {

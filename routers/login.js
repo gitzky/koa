@@ -1,12 +1,12 @@
 const router = require("koa-router")();
-const userModel = require("../lib/mysql");
+const userModel = require("../lib/sql");
 const md5 = require("md5");
 
 // 登录
-router.get("/login", async (ctx, next) => {
-  console.log(ctx.request.query);
-  let name = ctx.request.query.name;
-  let pass = ctx.request.query.pass;
+router.post("/api/login", async (ctx, next) => {
+  console.log(ctx.request.body);
+  let name = ctx.request.body.name;
+  let pass = ctx.request.body.pass;
 
   await userModel
     .findUserData(name)

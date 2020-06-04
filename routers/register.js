@@ -1,34 +1,48 @@
 const router = require("koa-router")();
-const userModel = require("../lib/mysql");
+const userModel = require("../lib/sql");
 const md5 = require("md5");
 
 const moment = require("moment");
 const fs = require("fs");
 
-router.get("/register", async (ctx, next) => {
+router.post("/api/register", async (ctx, next) => {
   let user = {
-    name: ctx.request.query.name,
-    pass: ctx.request.query.pass,
-    repeatpass: ctx.request.query.repeatpass,
-    avator: ctx.request.query.avator,
+    name: ctx.request.body.name,
+    pass: ctx.request.body.pass,
+    repeatpass: ctx.request.body.repeatpass,
+    avator: ctx.request.body.avator || "",
   };
+  console.log("user", user);
   await userModel.findUserData(user.name).then(async (result) => {
     console.log(result);
     if (result.length) {
       try {
         throw Error("用户已经存在");
       } catch (error) {
-        console.log(error);
+        console.log("error:", error);
+        // 用户存在
+        var json = {
+          code: "500",
+          data: null,
+          msg: error.toString(),
+        };
+        console.log("json", json);
+        ctx.body = JSON.stringify(json);
       }
-      // 用户存在
-      ctx.body = {
-        data: 1,
-      };
     } else if (user.pass !== user.repeatpass || user.pass === "") {
-      // 密码输入不一致
-      ctx.body = {
-        data: 2,
-      };
+      console.log("密码输入不一致");
+      try {
+        throw Error("密码输入不一致");
+      } catch (error) {
+        console.log(error);
+        // 用户存在
+        var json = {
+          code: "500",
+          data: null,
+          msg: error.toString(),
+        };
+        ctx.body = JSON.stringify(json);
+      }
     } else {
       // let base64Data = user.avator.replace(/^data:image\/\w+;base64,/, "");
       // let dataBuffer = Buffer.from(base64Data, "base64");
@@ -51,10 +65,19 @@ router.get("/register", async (ctx, next) => {
           moment().format("YYYY-MM-DD HH:mm:ss"),
         ])
         .then((res) => {
+          var json = { code: "0", data: res, msg: "成功" };
+          ctx.body = JSON.stringify(json);
           console.log("注册成功", res);
-          ctx.body = {
-            data: 3,
+        })
+        .catch((error) => {
+          console.log(error);
+          // 用户存在
+          var json = {
+            code: "500",
+            data: null,
+            msg: error.toString(),
           };
+          ctx.body = JSON.stringify(json);
         });
     }
   });
