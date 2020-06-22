@@ -1,12 +1,13 @@
 const router = require('koa-router')()
+const md5 = require('md5')
 const db = require('../lib/db')
 
-// 文章
-
-router.post('/api/selPostList', async (ctx, next) => {
-  console.log(ctx.request.body)
-  // ctx.body = '{"data":123}'
-  await db('posts')
+// 登录
+router.post('/api/login', async (ctx, next) => {
+  console.log(ctx)
+  // let name = ctx.request.body.name;
+  // let pass = ctx.request.body.pass;
+  db('users')
     .select()
     .then((data) => {
       console.log('data', data)

@@ -7,9 +7,9 @@
 - index 程序主文件
 - package.json 包括项目名、作者、依赖等等
 
-$ cnpm i koa koa-bodyparser koa-mysql-session koa-router koa-session-minimal koa-static koa-views md5 moment mysql ejs markdown-it chai mocha koa-static-cache --save-dev
+\$ cnpm i koa koa-bodyparser koa-router koa-static koa-views md5 moment mysql ejs markdown-it node-mysql-promise art-template koa-art-template --save-dev
 
-koa node框架
+koa node 框架
 koa-bodyparser 表单解析中间件
 koa-mysql-session、koa-session-minimal 处理数据库的中间件
 koa-router 路由中间件
@@ -18,45 +18,39 @@ ejs 模板引擎
 md5 密码加密
 moment 时间中间件
 mysql 数据库
-markdown-it markdown语法
+markdown-it markdown 语法
 koa-views 模板呈现中间件
 chai mocha 测试使用
 koa-static-cache 文件缓存
 
+##3 个表
 
+users posts comment
+id id id
+name name name
+pass title content
+avator content moment
+moment md postid
 
+​ uid avator
 
+​ moment
 
-##3个表
+​ comments
 
-users	       posts	    	comment
-id	               id	             	id
-name	       name	     	name
-pass	       title	             	content
-avator	       content	     	moment
-moment  	md	             	postid
+​ pv
 
-​			uid			avator
+​ avator
 
-​	       		moment 
-
-​      			comments
-
-​        		pv	
-
-​			avator	
-
-
-
-- id主键递增
+- id 主键递增
 - name: 用户名
 - pass：密码
 - avator：头像
 - title：文章标题
 - content：文章内容和评论
-- md：markdown语法
-- uid：发表文章的用户id
+- md：markdown 语法
+- uid：发表文章的用户 id
 - moment：创建时间
 - comments：文章评论数
 - pv：文章浏览数
-- postid：文章id
+- postid：文章 id
