@@ -1,47 +1,47 @@
-const router = require("koa-router")();
-const userModel = require("../lib/sql");
-const md5 = require("md5");
+const router = require('koa-router')()
+const userModel = require('../../lib/sql')
+const md5 = require('md5')
 
-const moment = require("moment");
-const fs = require("fs");
+const moment = require('moment')
+const fs = require('fs')
 
-router.post("/api/register", async (ctx, next) => {
+router.post('/', async (ctx, next) => {
   let user = {
     name: ctx.request.body.name,
     pass: ctx.request.body.pass,
     repeatpass: ctx.request.body.repeatpass,
-    avator: ctx.request.body.avator || "",
-  };
-  console.log("user", user);
+    avator: ctx.request.body.avator || '',
+  }
+  console.log('user', user)
   await userModel.findUserData(user.name).then(async (result) => {
-    console.log(result);
+    console.log(result)
     if (result.length) {
       try {
-        throw Error("用户已经存在");
+        throw Error('用户已经存在')
       } catch (error) {
-        console.log("error:", error);
+        console.log('error:', error)
         // 用户存在
         var json = {
-          code: "500",
+          code: '500',
           data: null,
           msg: error.toString(),
-        };
-        console.log("json", json);
-        ctx.body = JSON.stringify(json);
+        }
+        console.log('json', json)
+        ctx.body = JSON.stringify(json)
       }
-    } else if (user.pass !== user.repeatpass || user.pass === "") {
-      console.log("密码输入不一致");
+    } else if (user.pass !== user.repeatpass || user.pass === '') {
+      console.log('密码输入不一致')
       try {
-        throw Error("密码输入不一致");
+        throw Error('密码输入不一致')
       } catch (error) {
-        console.log(error);
+        console.log(error)
         // 用户存在
         var json = {
-          code: "500",
+          code: '500',
           data: null,
           msg: error.toString(),
-        };
-        ctx.body = JSON.stringify(json);
+        }
+        ctx.body = JSON.stringify(json)
       }
     } else {
       // let base64Data = user.avator.replace(/^data:image\/\w+;base64,/, "");
@@ -61,28 +61,28 @@ router.post("/api/register", async (ctx, next) => {
         .insertData([
           user.name,
           md5(user.pass),
-          "default.png",
-          moment().format("YYYY-MM-DD HH:mm:ss"),
+          'default.png',
+          moment().format('YYYY-MM-DD HH:mm:ss'),
         ])
         .then((res) => {
-          var json = { code: "0", data: res, msg: "成功" };
-          ctx.body = JSON.stringify(json);
-          console.log("注册成功", res);
+          var json = { code: '0', data: res, msg: '成功' }
+          ctx.body = JSON.stringify(json)
+          console.log('注册成功', res)
         })
         .catch((error) => {
-          console.log(error);
+          console.log(error)
           // 用户存在
           var json = {
-            code: "500",
+            code: '500',
             data: null,
             msg: error.toString(),
-          };
-          ctx.body = JSON.stringify(json);
-        });
+          }
+          ctx.body = JSON.stringify(json)
+        })
     }
-  });
-});
-module.exports = router;
+  })
+})
+module.exports = router.routes()
 /**
 我们使用md5实现密码加密，长度是32位的
 使用我们之前说的bodyParse来解析提交的数据，通过ctx.request.body得到
