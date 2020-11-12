@@ -37,3 +37,4 @@ router.post('/getMemberByToken', async (ctx, next) => {
 })
 
 module.exports = router.routes()
+
